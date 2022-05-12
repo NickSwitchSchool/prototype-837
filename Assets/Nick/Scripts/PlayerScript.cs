@@ -19,6 +19,8 @@ public class PlayerScript : MonoBehaviour
 
     public bool paused;
 
+    public Rigidbody player;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,27 +30,28 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (paused == false)
+        //rotation
+        mouseHorizontal = Input.GetAxis("Mouse X");
+        rotation.y += mouseHorizontal * mouseSentisivity;
+        transform.eulerAngles = rotation;
+
+        //sprinting
+        if (Input.GetButton("Sprint"))
         {
-            //rotation
-            mouseHorizontal = Input.GetAxis("Mouse X");
-            rotation.y += mouseHorizontal * mouseSentisivity;
-            transform.eulerAngles = rotation;
-
-            //sprinting
-            if (Input.GetButton("Sprint"))
-            {
-                speed = runspeed;
-            }
-            else
-            {
-                speed = walkspeed;
-            }
-
-            //movement
-            movement.x = Input.GetAxis("Horizontal");
-            movement.z = Input.GetAxis("Vertical");
-            transform.Translate(movement * speed * Time.deltaTime);
+            speed = runspeed;
         }
+        else
+        {
+            speed = walkspeed;
+        }
+
+        //movement
+        movement.x = Input.GetAxis("Horizontal") * 3;
+        movement.z = Input.GetAxis("Vertical") * 5;
+        if (player.velocity.magnitude < speed)
+        {
+            player.AddForce(transform.forward * movement.z);
+            player.AddForce(transform.right * movement.x);
+        } 
     }
 }
