@@ -17,9 +17,9 @@ public class PlayerScript : MonoBehaviour
     public Vector3 rotation;
     Vector3 movement;
 
-    public bool paused;
-
     public Rigidbody player;
+
+    bool canJump;
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +52,21 @@ public class PlayerScript : MonoBehaviour
         {
             player.AddForce(transform.forward * movement.z);
             player.AddForce(transform.right * movement.x);
-        } 
+        }
+
+        if (Physics.Raycast(transform.position, -Vector3.up, out onFloor, 1.1f))
+        {
+            canJump = true;
+        }
+        else
+        {
+            player.AddForce(-Vector3.up * 2);
+        }
+
+        if (Input.GetButtonDown("Jump") && canJump == true)
+        {
+            canJump = false;
+            player.AddForce(transform.up * 1000);
+        }
     }
 }
