@@ -11,20 +11,25 @@ public class PlayerScript : MonoBehaviour
     float speed;
     float mouseHorizontal;
 
-    RaycastHit wallJump;
+    RaycastHit wallJumpLeft;
+    RaycastHit wallJumpRight;
     RaycastHit onFloor;
 
     public Vector3 rotation;
     Vector3 movement;
 
-    public Rigidbody player;
+    public GameObject cam;
 
-    bool canJump;
+    public Rigidbody playerRB;
+
+    public int jumps;
+
+    public bool wallrunning;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -46,27 +51,90 @@ public class PlayerScript : MonoBehaviour
         }
 
         //movement
-        movement.x = Input.GetAxis("Horizontal") * 3;
-        movement.z = Input.GetAxis("Vertical") * 5;
-        if (player.velocity.magnitude < speed)
+        movement.x = Input.GetAxis("Horizontal") * 3000;
+        movement.z = Input.GetAxis("Vertical") * 5000;
+        if (playerRB.velocity.magnitude < speed)
         {
-            player.AddForce(transform.forward * movement.z);
-            player.AddForce(transform.right * movement.x);
+            playerRB.AddForce(transform.forward * movement.z * Time.deltaTime);
+            playerRB.AddForce(transform.right * movement.x * Time.deltaTime);
         }
 
-        if (Physics.Raycast(transform.position, -Vector3.up, out onFloor, 1.1f))
+        if (Input.GetButtonDown("Jump") && jumps > 0)
         {
-            canJump = true;
+            jumps -= 1;
+            playerRB.AddForce(transform.up * 1000);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        //gravity
+        {
+            playerRB.AddForce(Physics.gravity / 2);
+        }
+
+        //wallrun
+        if (Physics.Raycast(transform.position, transform.right, out wallJumpRight, .5f))
+        {
+            if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+            {
+                wallrunning = true;
+                if (cam.GetComponent<CamScript>().rotation.z < 45)
+                {
+                    cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime;
+
+                }
+            }
+            else
+            {
+                wallrunning = false;
+            }
+        }
+        else if (Physics.Raycast(transform.position, -transform.right, out wallJumpRight, .5f))
+        {
+            if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+            {
+                wallrunning = true;
+                if (cam.GetComponent<CamScript>().rotation.z > -45)
+                {
+                    cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime;
+
+                }
+            }
+            else
+            {
+                wallrunning = false;
+            }
         }
         else
         {
-            player.AddForce(-Vector3.up * 2);
+            wallrunning = false;
         }
 
-        if (Input.GetButtonDown("Jump") && canJump == true)
+        if (wallrunning == false)
         {
-            canJump = false;
-            player.AddForce(transform.up * 1000);
+            playerRB.AddForce(Physics.gravity * 5f);
+            if (cam.GetComponent<CamScript>().rotation.z > 1)
+            {
+                cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime;
+            }
+            else if (cam.GetComponent<CamScript>().rotation.z < -1)
+            {
+                cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime;
+
+            }
+        }
+        else
+        {
+            jumps = 2;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject)
+        {
+            jumps = 2;
         }
     }
 }

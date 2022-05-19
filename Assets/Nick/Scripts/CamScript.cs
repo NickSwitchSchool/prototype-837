@@ -6,7 +6,7 @@ public class CamScript : MonoBehaviour
 {
     float mouseVertical;
 
-    Vector3 rotation;
+    public Vector3 rotation;
 
     public GameObject player;
 
@@ -24,5 +24,22 @@ public class CamScript : MonoBehaviour
         rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity;
         rotation.y = player.GetComponent<PlayerScript>().rotation.y;
         transform.eulerAngles = rotation;
+
+        if (Input.GetAxis("Vertical") >= .7f && GetComponent<Camera>().fieldOfView < 90 && Input.GetButton("Sprint"))
+        {
+            GetComponent<Camera>().fieldOfView += 60 * Time.deltaTime;
+        }
+        else if (Input.GetAxis("Vertical") >= .7f && GetComponent<Camera>().fieldOfView < 75)
+        {
+            GetComponent<Camera>().fieldOfView += 60 * Time.deltaTime;
+        }
+        else if (Input.GetAxis("Vertical") >= .7f && GetComponent<Camera>().fieldOfView > 75)
+        {
+            GetComponent<Camera>().fieldOfView -= 120 * Time.deltaTime;
+        }
+        else if (Input.GetAxis("Vertical") < .7f && GetComponent<Camera>().fieldOfView > 60)
+        {
+            GetComponent<Camera>().fieldOfView -= 120 * Time.deltaTime;
+        }
     }
 }
