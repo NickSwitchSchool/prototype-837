@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    public float walkspeed;
-    public float runspeed;
-    public float dashspeed;
+    public float hp;
     public float mouseSentisivity;
-    float speed;
+    public float speed;
+    public float dashTime;
     float mouseHorizontal;
+    float inAir;
 
     RaycastHit wallJumpLeft;
     RaycastHit wallJumpRight;
@@ -22,9 +22,11 @@ public class PlayerScript : MonoBehaviour
 
     public Rigidbody playerRB;
 
-    public int jumps;
+    int jumps;
 
-    public bool wallrunning;
+    public bool isDead;
+    bool wallrunning;
+    public bool isDashing;
 
     // Start is called before the first frame update
     void Start()
@@ -35,51 +37,101 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //rotation
-        mouseHorizontal = Input.GetAxis("Mouse X");
-        rotation.y += mouseHorizontal * mouseSentisivity;
-        transform.eulerAngles = rotation;
-
-        //sprinting
-        if (Input.GetButton("Sprint"))
+        //die
+        if (hp <= 0)
         {
-            speed = runspeed;
-        }
-        else
-        {
-            speed = walkspeed;
+            isDead = true;
         }
 
-        //movement
-        movement.x = Input.GetAxis("Horizontal") * 3000;
-        movement.z = Input.GetAxis("Vertical") * 5000;
-        if (playerRB.velocity.magnitude < speed)
+        if (isDead == false)
         {
-            playerRB.AddForce(transform.forward * movement.z * Time.deltaTime);
-            playerRB.AddForce(transform.right * movement.x * Time.deltaTime);
-        }
+            //rotation
+            mouseHorizontal = Input.GetAxis("Mouse X");
+            rotation.y += mouseHorizontal * mouseSentisivity;
+            transform.eulerAngles = rotation;
+            if (dashTime < .2f)
+            {
+                dashTime += Time.deltaTime / 40;
+            }
 
-        if (Input.GetButtonDown("Jump") && jumps > 0)
-        {
-            jumps -= 1;
-            playerRB.AddForce(transform.up * 1000);
+            if (Input.GetButtonDown("Jump") && jumps > 0)
+            {
+                jumps -= 1;
+                playerRB.AddForce(transform.up * 1000);
+            }
+
+            if (Input.GetButtonDown("Sprint") && dashTime >= .2f)
+            {
+                isDashing = true;
+            }
+
+            if (isDashing == true)
+            {
+                dashTime -= Time.deltaTime;
+                playerRB.AddForce(transform.forward * 300);
+                if (dashTime < 0)
+                {
+                    isDashing = false;
+                }
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        //gravity
+        if (isDead == false)
         {
-            playerRB.AddForce(Physics.gravity / 2);
-        }
+            //movement
+            movement.x = Input.GetAxis("Horizontal");
+            movement.z = Input.GetAxis("Vertical");
+            MovePlayer();
 
-        //wallrun
-        if (Physics.Raycast(transform.position, transform.right, out wallJumpRight, .5f))
-        {
-            if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+            //wallrun
+            if (Physics.Raycast(transform.position, transform.right, out wallJumpRight, .5f))
             {
-                wallrunning = true;
-                if (cam.GetComponent<CamScript>().rotation.z < 45)
+                if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+                {
+                    wallrunning = true;
+                    if (cam.GetComponent<CamScript>().rotation.z < 45)
+                    {
+                        cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime;
+
+                    }
+                }
+                else
+                {
+                    wallrunning = false;
+                }
+            }
+            else if (Physics.Raycast(transform.position, -transform.right, out wallJumpRight, .5f))
+            {
+                if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+                {
+                    wallrunning = true;
+                    if (cam.GetComponent<CamScript>().rotation.z > -45)
+                    {
+                        cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime;
+
+                    }
+                }
+                else
+                {
+                    wallrunning = false;
+                }
+            }
+            else
+            {
+                wallrunning = false;
+            }
+
+            if (wallrunning == false)
+            {
+                playerRB.AddForce(Physics.gravity * 5f);
+                if (cam.GetComponent<CamScript>().rotation.z > 1)
+                {
+                    cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime;
+                }
+                else if (cam.GetComponent<CamScript>().rotation.z < -1)
                 {
                     cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime;
 
@@ -87,46 +139,8 @@ public class PlayerScript : MonoBehaviour
             }
             else
             {
-                wallrunning = false;
+                jumps = 2;
             }
-        }
-        else if (Physics.Raycast(transform.position, -transform.right, out wallJumpRight, .5f))
-        {
-            if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
-            {
-                wallrunning = true;
-                if (cam.GetComponent<CamScript>().rotation.z > -45)
-                {
-                    cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime;
-
-                }
-            }
-            else
-            {
-                wallrunning = false;
-            }
-        }
-        else
-        {
-            wallrunning = false;
-        }
-
-        if (wallrunning == false)
-        {
-            playerRB.AddForce(Physics.gravity * 5f);
-            if (cam.GetComponent<CamScript>().rotation.z > 1)
-            {
-                cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime;
-            }
-            else if (cam.GetComponent<CamScript>().rotation.z < -1)
-            {
-                cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime;
-
-            }
-        }
-        else
-        {
-            jumps = 2;
         }
     }
 
@@ -134,7 +148,13 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.gameObject)
         {
+            inAir = 0;
             jumps = 2;
         }
+    }
+    void MovePlayer()
+    {
+        Vector3 moveVector = transform.TransformDirection(movement) * speed * Time.deltaTime;
+        playerRB.velocity = new Vector3(moveVector.x, playerRB.velocity.y, moveVector.z);
     }
 }
