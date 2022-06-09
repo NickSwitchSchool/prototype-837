@@ -19,27 +19,30 @@ public class CamScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //look up and down
-        mouseVertical = Input.GetAxis("Mouse Y");
-        rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity;
-        rotation.y = player.GetComponent<PlayerScript>().rotation.y;
-        transform.eulerAngles = rotation;
+        if (player.GetComponent<PlayerScript>().isDead == false)
+        {
+            //look up and down
+            mouseVertical = Input.GetAxis("Mouse Y");
+            rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity;
+            rotation.y = player.GetComponent<PlayerScript>().rotation.y;
+            transform.eulerAngles = rotation;
 
-        if (Input.GetAxis("Vertical") >= .7f && GetComponent<Camera>().fieldOfView < 90 && Input.GetButton("Sprint"))
-        {
-            GetComponent<Camera>().fieldOfView += 60 * Time.deltaTime;
-        }
-        else if (Input.GetAxis("Vertical") >= .7f && GetComponent<Camera>().fieldOfView < 75)
-        {
-            GetComponent<Camera>().fieldOfView += 60 * Time.deltaTime;
-        }
-        else if (Input.GetAxis("Vertical") >= .7f && GetComponent<Camera>().fieldOfView > 75)
-        {
-            GetComponent<Camera>().fieldOfView -= 120 * Time.deltaTime;
-        }
-        else if (Input.GetAxis("Vertical") < .7f && GetComponent<Camera>().fieldOfView > 60)
-        {
-            GetComponent<Camera>().fieldOfView -= 120 * Time.deltaTime;
+            if (player.GetComponent<PlayerScript>().isDashing == true)
+            {
+                GetComponent<Camera>().fieldOfView += 120 * Time.deltaTime;
+            }
+            else if (Input.GetAxis("Vertical") >= .5f && GetComponent<Camera>().fieldOfView > 75)
+            {
+                GetComponent<Camera>().fieldOfView -= 60 * Time.deltaTime;
+            }
+            else if (Input.GetAxis("Vertical") >= .5f && GetComponent<Camera>().fieldOfView < 75)
+            {
+                GetComponent<Camera>().fieldOfView += 60 * Time.deltaTime;
+            }
+            else if (Input.GetAxis("Vertical") < .5f && GetComponent<Camera>().fieldOfView > 60)
+            {
+                GetComponent<Camera>().fieldOfView -= 120 * Time.deltaTime;
+            }
         }
     }
 }
