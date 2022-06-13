@@ -34,5 +34,6 @@ public class Swordman : MonoBehaviour
             agent.destination = transform.position;
             triggered = false;
         }
+        agent.speed = PlayerScript.gameSpeed * 3.5f;
     }
 }

@@ -13,6 +13,6 @@ public class BulletScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += transform.forward * 55 * Time.deltaTime;
+        transform.position += transform.forward * 55 * Time.deltaTime * PlayerScript.gameSpeed;
     }
 }

@@ -29,7 +29,7 @@ public class Gunman : MonoBehaviour
         if (distance <= range)
         {
             gameObject.transform.LookAt(player);
-            fireDelay += Time.deltaTime;
+            fireDelay += Time.deltaTime * PlayerScript.gameSpeed;
 
             if (fireDelay >= fireFreq)
             {

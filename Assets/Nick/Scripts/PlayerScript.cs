@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    public float hp;
+    static public float gameSpeed;
     public float mouseSentisivity;
     public float speed;
     public float dashTime;
+    public float slowmoSpeed;
     float mouseHorizontal;
     float inAir;
 
@@ -22,6 +23,7 @@ public class PlayerScript : MonoBehaviour
 
     public Rigidbody playerRB;
 
+    public int hp;
     int jumps;
 
     public bool isDead;
@@ -47,32 +49,46 @@ public class PlayerScript : MonoBehaviour
         {
             //rotation
             mouseHorizontal = Input.GetAxis("Mouse X");
-            rotation.y += mouseHorizontal * mouseSentisivity;
+            rotation.y += mouseHorizontal * mouseSentisivity * gameSpeed;
             transform.eulerAngles = rotation;
             if (dashTime < .2f)
             {
                 dashTime += Time.deltaTime / 40;
             }
 
-            if (Input.GetButtonDown("Jump") && jumps > 0)
+            if (Input.GetButtonDown("Jump") && jumps > 0 && !Input.GetButton("SlowMotion"))
             {
                 jumps -= 1;
                 playerRB.AddForce(transform.up * 1000);
             }
+            else if (Input.GetButtonDown("Jump") && jumps > 0 && Input.GetButton("SlowMotion"))
+            {
+                jumps -= 1;
+                playerRB.AddForce(transform.up * 500);
+            }
 
-            if (Input.GetButtonDown("Sprint") && dashTime >= .2f)
+            if (Input.GetButtonDown("Dash") && dashTime >= .2f)
             {
                 isDashing = true;
             }
 
             if (isDashing == true)
             {
-                dashTime -= Time.deltaTime;
-                playerRB.AddForce(transform.forward * 300);
+                dashTime -= Time.deltaTime * gameSpeed;
+                playerRB.AddForce(transform.forward * 300 * gameSpeed);
                 if (dashTime < 0)
                 {
                     isDashing = false;
                 }
+            }
+
+            if (Input.GetButton("SlowMotion"))
+            {
+                gameSpeed = slowmoSpeed;
+            }
+            else
+            {
+                gameSpeed = 1;
             }
         }
     }
@@ -94,7 +110,7 @@ public class PlayerScript : MonoBehaviour
                     wallrunning = true;
                     if (cam.GetComponent<CamScript>().rotation.z < 45)
                     {
-                        cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime;
+                        cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime * gameSpeed;
 
                     }
                 }
@@ -110,7 +126,7 @@ public class PlayerScript : MonoBehaviour
                     wallrunning = true;
                     if (cam.GetComponent<CamScript>().rotation.z > -45)
                     {
-                        cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime;
+                        cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime * gameSpeed;
 
                     }
                 }
@@ -126,14 +142,14 @@ public class PlayerScript : MonoBehaviour
 
             if (wallrunning == false)
             {
-                playerRB.AddForce(Physics.gravity * 5f);
-                if (cam.GetComponent<CamScript>().rotation.z > 1)
+                playerRB.AddForce(Physics.gravity * 5f * gameSpeed);
+                if (cam.GetComponent<CamScript>().rotation.z > 2)
                 {
-                    cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime;
+                    cam.GetComponent<CamScript>().rotation.z -= 135 * Time.deltaTime * gameSpeed;
                 }
-                else if (cam.GetComponent<CamScript>().rotation.z < -1)
+                else if (cam.GetComponent<CamScript>().rotation.z < -2)
                 {
-                    cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime;
+                    cam.GetComponent<CamScript>().rotation.z += 135 * Time.deltaTime * gameSpeed;
 
                 }
             }
@@ -154,7 +170,7 @@ public class PlayerScript : MonoBehaviour
     }
     void MovePlayer()
     {
-        Vector3 moveVector = transform.TransformDirection(movement) * speed * Time.deltaTime;
+        Vector3 moveVector = transform.TransformDirection(movement) * speed * Time.deltaTime * gameSpeed;
         playerRB.velocity = new Vector3(moveVector.x, playerRB.velocity.y, moveVector.z);
     }
 }

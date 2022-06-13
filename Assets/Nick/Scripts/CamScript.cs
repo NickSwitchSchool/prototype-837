@@ -29,19 +29,19 @@ public class CamScript : MonoBehaviour
 
             if (player.GetComponent<PlayerScript>().isDashing == true)
             {
-                GetComponent<Camera>().fieldOfView += 120 * Time.deltaTime;
+                GetComponent<Camera>().fieldOfView += 120 * Time.deltaTime * PlayerScript.gameSpeed;
             }
             else if (Input.GetAxis("Vertical") >= .5f && GetComponent<Camera>().fieldOfView > 75)
             {
-                GetComponent<Camera>().fieldOfView -= 60 * Time.deltaTime;
+                GetComponent<Camera>().fieldOfView -= 60 * Time.deltaTime * PlayerScript.gameSpeed;
             }
             else if (Input.GetAxis("Vertical") >= .5f && GetComponent<Camera>().fieldOfView < 75)
             {
-                GetComponent<Camera>().fieldOfView += 60 * Time.deltaTime;
+                GetComponent<Camera>().fieldOfView += 60 * Time.deltaTime * PlayerScript.gameSpeed;
             }
             else if (Input.GetAxis("Vertical") < .5f && GetComponent<Camera>().fieldOfView > 60)
             {
-                GetComponent<Camera>().fieldOfView -= 120 * Time.deltaTime;
+                GetComponent<Camera>().fieldOfView -= 120 * Time.deltaTime * PlayerScript.gameSpeed;
             }
         }
     }

@@ -33,7 +33,7 @@ public class Shoot : MonoBehaviour
         }
         else if (ammo < maxAmmo)
         {
-            ammoRegenTimer += Time.deltaTime;
+            ammoRegenTimer += Time.deltaTime * PlayerScript.gameSpeed;
 
             if (ammoRegenTimer >= ammoRegenTime)
             {
