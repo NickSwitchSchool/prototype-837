@@ -51,9 +51,9 @@ public class PlayerScript : MonoBehaviour
             mouseHorizontal = Input.GetAxis("Mouse X");
             rotation.y += mouseHorizontal * mouseSentisivity * gameSpeed;
             transform.eulerAngles = rotation;
-            if (dashTime < .2f)
+            if (dashTime < .3f)
             {
-                dashTime += Time.deltaTime / 40;
+                dashTime += Time.deltaTime / 20;
             }
 
             if (Input.GetButtonDown("Jump") && jumps > 0 && !Input.GetButton("SlowMotion"))
@@ -67,7 +67,7 @@ public class PlayerScript : MonoBehaviour
                 playerRB.AddForce(transform.up * 500);
             }
 
-            if (Input.GetButtonDown("Dash") && dashTime >= .2f)
+            if (Input.GetButtonDown("Dash") && dashTime >= 0.3f)
             {
                 isDashing = true;
             }

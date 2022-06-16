@@ -27,9 +27,9 @@ public class CamScript : MonoBehaviour
             rotation.y = player.GetComponent<PlayerScript>().rotation.y;
             transform.eulerAngles = rotation;
 
-            if (player.GetComponent<PlayerScript>().isDashing == true)
+            if (player.GetComponent<PlayerScript>().isDashing == true && GetComponent<Camera>().fieldOfView < 120)
             {
-                GetComponent<Camera>().fieldOfView += 120 * Time.deltaTime * PlayerScript.gameSpeed;
+                GetComponent<Camera>().fieldOfView += 180 * Time.deltaTime * PlayerScript.gameSpeed;
             }
             else if (Input.GetAxis("Vertical") >= .5f && GetComponent<Camera>().fieldOfView > 75)
             {
