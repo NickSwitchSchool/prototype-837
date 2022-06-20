@@ -13,6 +13,7 @@ public class Sounds : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GetComponent<AudioSource>().pitch = PlayerScript.gameSpeed;
         if (GetComponent<AudioSource>().time >= GetComponent<AudioSource>().clip.length)
         {
             Destroy(gameObject);

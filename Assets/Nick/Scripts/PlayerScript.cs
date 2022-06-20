@@ -10,11 +10,8 @@ public class PlayerScript : MonoBehaviour
     public float dashTime;
     public float slowmoSpeed;
     float mouseHorizontal;
-    float inAir;
 
-    RaycastHit wallJumpLeft;
-    RaycastHit wallJumpRight;
-    RaycastHit onFloor;
+    RaycastHit wallJump;
 
     public Vector3 rotation;
     Vector3 movement;
@@ -31,12 +28,6 @@ public class PlayerScript : MonoBehaviour
     public bool isDashing;
     bool wallrunning;
     bool soundsStarted;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -113,9 +104,9 @@ public class PlayerScript : MonoBehaviour
 
 
             //wallrun
-            if (Physics.Raycast(transform.position, transform.right, out wallJumpRight, .5f))
+            if (Physics.Raycast(transform.position, transform.right, out wallJump, .5f))
             {
-                if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+                if (wallJump.transform.gameObject.tag == "Walljumpable")
                 {
                     wallrunning = true;
                     if (cam.GetComponent<CamScript>().rotation.z < 45)
@@ -129,9 +120,9 @@ public class PlayerScript : MonoBehaviour
                     wallrunning = false;
                 }
             }
-            else if (Physics.Raycast(transform.position, -transform.right, out wallJumpRight, .5f))
+            else if (Physics.Raycast(transform.position, -transform.right, out wallJump, .5f))
             {
-                if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+                if (wallJump.transform.gameObject.tag == "Walljumpable")
                 {
                     wallrunning = true;
                     if (cam.GetComponent<CamScript>().rotation.z > -45)
@@ -174,7 +165,6 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.gameObject)
         {
-            inAir = 0;
             jumps = 2;
         }
     }
@@ -187,7 +177,7 @@ public class PlayerScript : MonoBehaviour
     IEnumerator FootSteps()
     {
         Instantiate(footStep, transform.position, Quaternion.identity);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.2f / PlayerScript.gameSpeed);
         if (movement.z < 1 || playerRB.velocity.y <= 1 || playerRB.velocity.y >= 1)
         {
             soundsStarted = false;
