@@ -20,6 +20,7 @@ public class PlayerScript : MonoBehaviour
     Vector3 movement;
 
     public GameObject cam;
+    public GameObject footStep;
 
     public Rigidbody playerRB;
 
@@ -27,8 +28,9 @@ public class PlayerScript : MonoBehaviour
     int jumps;
 
     public bool isDead;
-    bool wallrunning;
     public bool isDashing;
+    bool wallrunning;
+    bool soundsStarted;
 
     // Start is called before the first frame update
     void Start()
@@ -91,6 +93,13 @@ public class PlayerScript : MonoBehaviour
                 gameSpeed = 1;
             }
         }
+
+        //movesound
+        if (playerRB.velocity.y == 0 && movement.z == 1 && soundsStarted == false)
+        {
+            soundsStarted = true;
+            StartCoroutine(FootSteps());
+        }
     }
 
     private void FixedUpdate()
@@ -101,6 +110,7 @@ public class PlayerScript : MonoBehaviour
             movement.x = Input.GetAxis("Horizontal");
             movement.z = Input.GetAxis("Vertical");
             MovePlayer();
+
 
             //wallrun
             if (Physics.Raycast(transform.position, transform.right, out wallJumpRight, .5f))
@@ -172,5 +182,19 @@ public class PlayerScript : MonoBehaviour
     {
         Vector3 moveVector = transform.TransformDirection(movement) * speed * Time.deltaTime * gameSpeed;
         playerRB.velocity = new Vector3(moveVector.x, playerRB.velocity.y, moveVector.z);
+    }
+
+    IEnumerator FootSteps()
+    {
+        Instantiate(footStep, transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(0.2f);
+        if (movement.z < 1 || playerRB.velocity.y <= 1 || playerRB.velocity.y >= 1)
+        {
+            soundsStarted = false;
+        }
+        else
+        {
+            StartCoroutine(FootSteps());
+        }
     }
 }

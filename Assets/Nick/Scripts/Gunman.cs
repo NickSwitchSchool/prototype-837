@@ -5,6 +5,7 @@ using UnityEngine;
 public class Gunman : MonoBehaviour
 {
     public GameObject bullet;
+    public GameObject bulletSound;
 
     public Transform player;
     public Transform bulletLocation;
@@ -31,9 +32,10 @@ public class Gunman : MonoBehaviour
             gameObject.transform.LookAt(player);
             fireDelay += Time.deltaTime * PlayerScript.gameSpeed;
 
-            if (fireDelay >= fireFreq)
+            if (fireDelay >= fireFreq + Random.Range(0f, 2f))
             {
-                fireDelay = 0;
+                fireDelay = 0; 
+                Instantiate(bulletSound, bulletLocation.position, Quaternion.identity);
                 GameObject firedBullet = Instantiate(bullet, bulletLocation.position, Quaternion.identity);
                 firedBullet.GetComponent<Transform>().LookAt(player);
             }
