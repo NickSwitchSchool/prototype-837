@@ -23,7 +23,7 @@ public class CamScript : MonoBehaviour
         {
             //look up and down
             mouseVertical = Input.GetAxis("Mouse Y");
-            rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity;
+            rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity * PlayerScript.gameSpeed;
             rotation.y = player.GetComponent<PlayerScript>().rotation.y;
             transform.eulerAngles = rotation;
 
