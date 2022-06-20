@@ -403,6 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 7766161665786488149, guid: c657a11589b67eb489f690c054f10a8e, type: 3}
+  bulletSound: {fileID: 2677035523226053894, guid: c33faa789dc7211498b330266b90647e, type: 3}
   fireRate: 0.5
   maxAmmo: 6
   ammo: 6
@@ -5545,6 +5546,7 @@ MonoBehaviour:
   slowmoSpeed: 0.1
   rotation: {x: 0, y: 0, z: 0}
   cam: {fileID: 157313166}
+  footStep: {fileID: 4870413936409940292, guid: 393abe22ac398f34b9e1a2c20d67929f, type: 3}
   playerRB: {fileID: 969493612}
   hp: 10
   isDead: 0
@@ -5724,10 +5726,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 7766161665786488149, guid: c657a11589b67eb489f690c054f10a8e, type: 3}
+  bulletSound: {fileID: 2677035523226053894, guid: c33faa789dc7211498b330266b90647e, type: 3}
   player: {fileID: 969493616}
   bulletLocation: {fileID: 651149111}
   range: 50
-  fireFreq: 0.5
+  fireFreq: 1
 --- !u!136 &1460866153
 CapsuleCollider:
   m_ObjectHideFlags: 0

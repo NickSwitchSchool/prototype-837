@@ -5,6 +5,7 @@ using UnityEngine;
 public class Shoot : MonoBehaviour
 {
     public GameObject bullet;
+    public GameObject bulletSound;
     public float fireRate;
     float nextFire;
     public int maxAmmo;
@@ -26,6 +27,7 @@ public class Shoot : MonoBehaviour
             {
                 nextFire = Time.time + fireRate;
                 print("shoot");
+                Instantiate(bulletSound, transform.position, Quaternion.identity);
                 GameObject shotBullet = Instantiate(bullet, transform.position, Quaternion.identity);
                 shotBullet.transform.rotation = transform.rotation;
                 ammo--;
