@@ -12,6 +12,7 @@ public class Shoot : MonoBehaviour
     public int ammo;
     public float ammoRegenTime;
     float ammoRegenTimer;
+    public Animator arms;
 
     void Start()
     {
@@ -22,6 +23,8 @@ public class Shoot : MonoBehaviour
 
         if (Input.GetButtonDown("Fire2") && ammo > 0)
         {
+            arms.SetInteger("Action", 1);
+            StartCoroutine(StopAnimation());
             ammoRegenTimer = 0;
             if (Time.time > nextFire)
             {
@@ -30,6 +33,7 @@ public class Shoot : MonoBehaviour
                 Instantiate(bulletSound, transform.position, Quaternion.identity);
                 GameObject shotBullet = Instantiate(bullet, transform.position, Quaternion.identity);
                 shotBullet.transform.rotation = transform.rotation;
+                shotBullet.GetComponent<BulletScript>().playerShot = true;
                 ammo--;
             }
         }
@@ -47,5 +51,11 @@ public class Shoot : MonoBehaviour
         {
             ammoRegenTimer = 0;
         }
+    }
+
+    IEnumerator StopAnimation()
+    {
+        yield return new WaitForSeconds(0.2f);
+        arms.SetInteger("Action", 0);
     }
 }

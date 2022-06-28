@@ -29,9 +29,12 @@ public class PlayerScript : MonoBehaviour
     bool wallrunning;
     bool soundsStarted;
 
+    public Animator arms;
+
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(arms.GetInteger("Action"));
         //die
         if (hp <= 0)
         {
@@ -86,8 +89,9 @@ public class PlayerScript : MonoBehaviour
         }
 
         //movesound
-        if (playerRB.velocity.y == 0 && movement.z == 1 && soundsStarted == false)
+        if (playerRB.velocity.y == 0 && movement.z >= .7 && soundsStarted == false)
         {
+            arms.SetInteger("Action", 2);
             soundsStarted = true;
             StartCoroutine(FootSteps());
         }
@@ -178,8 +182,9 @@ public class PlayerScript : MonoBehaviour
     {
         Instantiate(footStep, transform.position, Quaternion.identity);
         yield return new WaitForSeconds(0.2f / PlayerScript.gameSpeed);
-        if (movement.z < 1 || playerRB.velocity.y <= 1 || playerRB.velocity.y >= 1)
+        if (movement.z < .7f || playerRB.velocity.y <= 1 || playerRB.velocity.y >= 1)
         {
+            arms.SetInteger("Action", 0);
             soundsStarted = false;
         }
         else
