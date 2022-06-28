@@ -10,16 +10,14 @@ public class PlayerScript : MonoBehaviour
     public float dashTime;
     public float slowmoSpeed;
     float mouseHorizontal;
-    float inAir;
 
-    RaycastHit wallJumpLeft;
-    RaycastHit wallJumpRight;
-    RaycastHit onFloor;
+    RaycastHit wallJump;
 
     public Vector3 rotation;
     Vector3 movement;
 
     public GameObject cam;
+    public GameObject footStep;
 
     public Rigidbody playerRB;
 
@@ -27,18 +25,16 @@ public class PlayerScript : MonoBehaviour
     int jumps;
 
     public bool isDead;
-    bool wallrunning;
     public bool isDashing;
+    bool wallrunning;
+    bool soundsStarted;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+    public Animator arms;
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(arms.GetInteger("Action"));
         //die
         if (hp <= 0)
         {
@@ -91,6 +87,14 @@ public class PlayerScript : MonoBehaviour
                 gameSpeed = 1;
             }
         }
+
+        //movesound
+        if (playerRB.velocity.y == 0 && movement.z >= .7 && soundsStarted == false)
+        {
+            arms.SetInteger("Action", 2);
+            soundsStarted = true;
+            StartCoroutine(FootSteps());
+        }
     }
 
     private void FixedUpdate()
@@ -102,10 +106,11 @@ public class PlayerScript : MonoBehaviour
             movement.z = Input.GetAxis("Vertical");
             MovePlayer();
 
+
             //wallrun
-            if (Physics.Raycast(transform.position, transform.right, out wallJumpRight, .5f))
+            if (Physics.Raycast(transform.position, transform.right, out wallJump, .5f))
             {
-                if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+                if (wallJump.transform.gameObject.tag == "Walljumpable")
                 {
                     wallrunning = true;
                     if (cam.GetComponent<CamScript>().rotation.z < 45)
@@ -119,9 +124,9 @@ public class PlayerScript : MonoBehaviour
                     wallrunning = false;
                 }
             }
-            else if (Physics.Raycast(transform.position, -transform.right, out wallJumpRight, .5f))
+            else if (Physics.Raycast(transform.position, -transform.right, out wallJump, .5f))
             {
-                if (wallJumpRight.transform.gameObject.tag == "Walljumpable")
+                if (wallJump.transform.gameObject.tag == "Walljumpable")
                 {
                     wallrunning = true;
                     if (cam.GetComponent<CamScript>().rotation.z > -45)
@@ -164,7 +169,6 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.gameObject)
         {
-            inAir = 0;
             jumps = 2;
         }
     }
@@ -172,5 +176,20 @@ public class PlayerScript : MonoBehaviour
     {
         Vector3 moveVector = transform.TransformDirection(movement) * speed * Time.deltaTime * gameSpeed;
         playerRB.velocity = new Vector3(moveVector.x, playerRB.velocity.y, moveVector.z);
+    }
+
+    IEnumerator FootSteps()
+    {
+        Instantiate(footStep, transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(0.2f / PlayerScript.gameSpeed);
+        if (movement.z < .7f || playerRB.velocity.y <= 1 || playerRB.velocity.y >= 1)
+        {
+            arms.SetInteger("Action", 0);
+            soundsStarted = false;
+        }
+        else
+        {
+            StartCoroutine(FootSteps());
+        }
     }
 }

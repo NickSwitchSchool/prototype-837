@@ -4,28 +4,55 @@ using UnityEngine;
 
 public class CamScript : MonoBehaviour
 {
+    public float maxXRotation;
     float mouseVertical;
 
     public Vector3 rotation;
 
     public GameObject player;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player.GetComponent<PlayerScript>().isDead == false)
+        if (Input.GetButtonDown("Fire1"))
         {
-            //look up and down
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        if (player.GetComponent<PlayerScript>().isDead == false)
+        {//look up and down within limits
             mouseVertical = Input.GetAxis("Mouse Y");
-            rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity;
+            if (rotation.x < maxXRotation && rotation.x > -maxXRotation)
+            {
+                rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity;
+            }
+            else if (rotation.x >= maxXRotation && mouseVertical > 0)
+            {
+                rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity;
+            }
+            else if (rotation.x <= -maxXRotation && mouseVertical < 0)
+            {
+                rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity;
+            }
+
             rotation.y = player.GetComponent<PlayerScript>().rotation.y;
             transform.eulerAngles = rotation;
+
+            ////look up and down
+            //mouseVertical = Input.GetAxis("Mouse Y");
+            //rotation.x -= mouseVertical * player.GetComponent<PlayerScript>().mouseSentisivity * PlayerScript.gameSpeed;
+            //rotation.y = player.GetComponent<PlayerScript>().rotation.y;
+            //transform.eulerAngles = rotation;
 
             if (player.GetComponent<PlayerScript>().isDashing == true && GetComponent<Camera>().fieldOfView < 120)
             {
