@@ -17,7 +17,7 @@ public class BulletScript : MonoBehaviour
         if (other.gameObject.tag == "Player" && playerShot == false)
         {
             Debug.Log("Nub");
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<PlayerScript>().hp -= 1;
         }
     }
 }
