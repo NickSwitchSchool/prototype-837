@@ -12,6 +12,7 @@ public class PlayerScript : MonoBehaviour
     float mouseHorizontal;
 
     RaycastHit wallJump;
+    RaycastHit hit;
 
     public Vector3 rotation;
     Vector3 movement;
@@ -35,6 +36,7 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         Debug.Log(arms.GetInteger("Action"));
+
         //die
         if (hp <= 0)
         {
@@ -85,6 +87,17 @@ public class PlayerScript : MonoBehaviour
             else
             {
                 gameSpeed = 1;
+            }
+
+
+            if (Input.GetButtonDown("Fire1") && Physics.Raycast(transform.position, transform.forward, out hit, 2))
+            {
+                arms.SetInteger("Action", Random.Range(3, 5));
+                StartCoroutine(AnimationFix());
+                if (hit.transform.tag == "Enemy")
+                {
+                    hit.transform.gameObject.GetComponent<Enemies>().hp -= 1;
+                }
             }
         }
 
@@ -191,5 +204,11 @@ public class PlayerScript : MonoBehaviour
         {
             StartCoroutine(FootSteps());
         }
+    }
+
+    IEnumerator AnimationFix()
+    {
+        yield return new WaitForSeconds(0.01f);
+        arms.SetInteger("Action", 0);
     }
 }
