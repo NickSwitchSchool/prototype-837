@@ -19,37 +19,47 @@ public class Swordman : MonoBehaviour
 
     public RaycastHit hit;
 
+    Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         distance = Vector3.Distance(player.position, transform.position);
         if (distance <= range && distance > attackRange)
         {
             agent.destination = player.position + -transform.forward * 1;
+            animator.SetInteger("Action", 1);
             triggered = true;
         }
         
-        if (distance <= attackRange)
+        if (distance <= attackRange + 1)
         {
             gameObject.transform.LookAt(player);
             attackDelay += Time.deltaTime * PlayerScript.gameSpeed;
-            Debug.Log("WHAM!");
 
             if (attackDelay >= attackFreq + Random.Range(0f, 2f))
             {
-                Debug.Log("KAWHAM!");
+                if (animator.GetInteger("Action") != 2 && animator.GetInteger("Action") != 3)
+                {
+                    animator.SetInteger("Action", 2);
+                }
+                else
+                {
+                    animator.SetInteger("Action", 3);
+                }
+
                 if (Physics.Raycast(transform.position, transform.forward, out hit, attackRange))
                 {
-                    Debug.Log("KABOOM!");
                     if (hit.transform.tag == "Player")
                     {
-                        Debug.Log("SLAM!");
                         hit.transform.gameObject.GetComponent<PlayerScript>().hp -= 1;
                     }
                 }
@@ -59,6 +69,7 @@ public class Swordman : MonoBehaviour
 
         if (distance > range)
         {
+            animator.SetInteger("Action", 0);
             agent.destination = transform.position;
             triggered = false;
         }

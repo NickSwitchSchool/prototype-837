@@ -19,5 +19,10 @@ public class BulletScript : MonoBehaviour
             Debug.Log("Nub");
             other.gameObject.GetComponent<PlayerScript>().hp -= 1;
         }
+        else if (other.gameObject.tag == "Enemy" && playerShot == true)
+        {
+            Debug.Log("PewPew");
+            other.gameObject.GetComponent<Enemies>().hp -= 1;
+        }
     }
 }
