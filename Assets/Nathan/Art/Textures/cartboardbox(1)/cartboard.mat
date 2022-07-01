@@ -22,7 +22,11 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: cartboard
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+<<<<<<< Updated upstream:Assets/Nathan/Art/Textures/cartboardbox(1)/cartboard.mat
   m_ShaderKeywords: _METALLICSPECGLOSSMAP _NORMALMAP
+=======
+  m_ShaderKeywords: _METALLICSPECGLOSSMAP _NORMALMAP _PARALLAXMAP
+>>>>>>> Stashed changes:Assets/Nathan/Art/Textures/cartboardbox(1)/Cartboardbox.mat
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -34,11 +38,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
+<<<<<<< Updated upstream:Assets/Nathan/Art/Textures/cartboardbox(1)/cartboard.mat
         m_Texture: {fileID: 2800000, guid: 03291b62e45593c46b5e3a7d67ca8d77, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 2800000, guid: 3e5e8ad287e2dba4ba3f5dd99e3d6f52, type: 3}
+=======
+        m_Texture: {fileID: 2800000, guid: 9ead40f79bbe8404aac25c6839957434, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: 2daf224e4870314488b993d21da210ef, type: 3}
+>>>>>>> Stashed changes:Assets/Nathan/Art/Textures/cartboardbox(1)/Cartboardbox.mat
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -58,11 +70,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+<<<<<<< Updated upstream:Assets/Nathan/Art/Textures/cartboardbox(1)/cartboard.mat
         m_Texture: {fileID: 2800000, guid: 03291b62e45593c46b5e3a7d67ca8d77, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 2800000, guid: 668e9e73afec69f4295acb30d71f1bfa, type: 3}
+=======
+        m_Texture: {fileID: 2800000, guid: 9ead40f79bbe8404aac25c6839957434, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 2800000, guid: 6613b30f4012aa9409ec04ef6734222b, type: 3}
+>>>>>>> Stashed changes:Assets/Nathan/Art/Textures/cartboardbox(1)/Cartboardbox.mat
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -70,7 +90,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+<<<<<<< Updated upstream:Assets/Nathan/Art/Textures/cartboardbox(1)/cartboard.mat
         m_Texture: {fileID: 0}
+=======
+        m_Texture: {fileID: 2800000, guid: fc32fde991dbe3c4c8347c4005a3dfc8, type: 3}
+>>>>>>> Stashed changes:Assets/Nathan/Art/Textures/cartboardbox(1)/Cartboardbox.mat
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
