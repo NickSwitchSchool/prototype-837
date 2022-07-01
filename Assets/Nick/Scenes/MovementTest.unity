@@ -276,7 +276,7 @@ MonoBehaviour:
   fireRate: 0.3
   maxAmmo: 6
   ammo: 6
-  ammoRegenTime: 0.3
+  ammoRegenTime: 1.5
   arms: {fileID: 2046371045}
 --- !u!1 &1087929589
 GameObject:

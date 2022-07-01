@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -32,10 +33,38 @@ public class PlayerScript : MonoBehaviour
 
     public Animator arms;
 
+    public Image hpbar;
+
+    public Sprite hp3;
+    public Sprite hp2;
+    public Sprite hp1;
+
+    public Text ammo;
+
     // Update is called once per frame
     void Update()
     {
         Debug.Log(arms.GetInteger("Action"));
+
+        //show hp and ammo
+        ammo.text = $"{GetComponent<Shoot>().ammo} / {GetComponent<Shoot>().maxAmmo}";
+        if (hp >= 3)
+        {
+            hpbar.sprite = hp3;
+        }
+        else if (hp == 2)
+        {
+            hpbar.sprite = hp2;
+        }
+        else if (hp == 1)
+        {
+            hpbar.sprite = hp1;
+        }
+        else
+        {
+            Destroy(hpbar);
+            playerRB.constraints = RigidbodyConstraints.None;
+        }
 
         //die
         if (hp <= 0)
