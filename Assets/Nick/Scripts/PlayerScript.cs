@@ -99,6 +99,11 @@ public class PlayerScript : MonoBehaviour
                     hit.transform.gameObject.GetComponent<Enemies>().hp -= 1;
                 }
             }
+            else if (Input.GetButtonDown("Fire1"))
+            {
+                arms.SetInteger("Action", Random.Range(3, 5));
+                StartCoroutine(AnimationFix());
+            }
         }
 
         //movesound
