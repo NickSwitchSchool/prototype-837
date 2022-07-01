@@ -303,6 +303,7 @@ GameObject:
   - component: {fileID: 7194252456890196176}
   - component: {fileID: 1968999228265643078}
   - component: {fileID: 8085478309454045209}
+  - component: {fileID: 5870070327774259670}
   m_Layer: 0
   m_Name: roof.juiste versie (5) 1 1 (1)
   m_TagString: Untagged
@@ -377,6 +378,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5870070327774259670
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2973194378413913261}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.46309763, y: 0.4024626, z: 0.6791452}
+  m_Center: {x: -0.22888903, y: 0.20539734, z: -0.13018708}
 --- !u!1 &6838341822856324005
 GameObject:
   m_ObjectHideFlags: 0
